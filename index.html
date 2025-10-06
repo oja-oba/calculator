@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>10% Calculator (EUR Style)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2em;
+      max-width: 400px;
+      margin: auto;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 1em;
+      margin: 5px 0;
+      width: 100%;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>10% Calculator (EUR)</h1>
+  <input type="text" id="numberInput" placeholder="Enter a number like 123,45" />
+  <button onclick="addNumber()">Add 10%</button>
+  <button onclick="resetAll()">Reset</button>
+
+  <div id="result">
+    <p>Total 10% Sum: <strong id="total">0,00</strong> €</p>
+    <ul id="list"></ul>
+  </div>
+
+  <script>
+    let total = 0;
+
+    function formatEuro(value) {
+      return value.toLocaleString('de-DE', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function parseEuropeanNumber(value) {
+      // Convert comma to dot for JS parsing
+      return parseFloat(value.replace(',', '.'));
+    }
+
+    function addNumber() {
+      const input = document.getElementById('numberInput');
+      const rawValue = input.value.trim();
+      const value = parseEuropeanNumber(rawValue);
+
+      if (isNaN(value)) {
+        alert("Please enter a valid number using a comma for decimals (e.g., 123,45).");
+        return;
+      }
+
+      const percent = value * 0.10;
+      total += percent;
+
+      const listItem = document.createElement('li');
+      listItem.textContent = `10% of ${formatEuro(value)} € = ${formatEuro(percent)} €`;
+      document.getElementById('list').appendChild(listItem);
+
+      document.getElementById('total').textContent = `${formatEuro(total)}`;
+      input.value = '';
+      input.focus();
+    }
+
+    function resetAll() {
+      total = 0;
+      document.getElementById('total').textContent = '0,00';
+      document.getElementById('list').innerHTML = '';
+      document.getElementById('numberInput').value = '';
+    }
+  </script>
+</body>
+</html>
