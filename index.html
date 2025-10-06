@@ -2,21 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>10% Calculator (EUR Style)</title>
+  <title>Percentage Calculator (EUR Style)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 2em;
-      max-width: 400px;
+      max-width: 450px;
       margin: auto;
     }
 
-    input, button {
+    input, button, select {
       padding: 10px;
       font-size: 1em;
       margin: 5px 0;
       width: 100%;
+      box-sizing: border-box;
     }
 
     #result {
@@ -30,13 +31,20 @@
   </style>
 </head>
 <body>
-  <h1>10% Calculator (EUR)</h1>
+  <h1>Percentage Calculator (EUR)</h1>
+
   <input type="text" id="numberInput" placeholder="Enter a number like 123,45" />
-  <button onclick="addNumber()">Add 10%</button>
+
+  <select id="percentageSelect">
+    <option value="0.10">10%</option>
+    <option value="0.015">1,5%</option>
+  </select>
+
+  <button onclick="addNumber()">Add</button>
   <button onclick="resetAll()">Reset</button>
 
   <div id="result">
-    <p>Total 10% Sum: <strong id="total">0,00</strong> €</p>
+    <p>Total Sum: <strong id="total">0,00</strong> €</p>
     <ul id="list"></ul>
   </div>
 
@@ -51,7 +59,6 @@
     }
 
     function parseEuropeanNumber(value) {
-      // Convert comma to dot for JS parsing
       return parseFloat(value.replace(',', '.'));
     }
 
@@ -59,17 +66,18 @@
       const input = document.getElementById('numberInput');
       const rawValue = input.value.trim();
       const value = parseEuropeanNumber(rawValue);
+      const percentage = parseFloat(document.getElementById('percentageSelect').value);
 
       if (isNaN(value)) {
         alert("Please enter a valid number using a comma for decimals (e.g., 123,45).");
         return;
       }
 
-      const percent = value * 0.10;
-      total += percent;
+      const percentValue = value * percentage;
+      total += percentValue;
 
       const listItem = document.createElement('li');
-      listItem.textContent = `10% of ${formatEuro(value)} € = ${formatEuro(percent)} €`;
+      listItem.textContent = `${(percentage * 100).toLocaleString('de-DE')}% of ${formatEuro(value)} € = ${formatEuro(percentValue)} €`;
       document.getElementById('list').appendChild(listItem);
 
       document.getElementById('total').textContent = `${formatEuro(total)}`;
